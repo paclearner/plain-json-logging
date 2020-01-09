@@ -48,7 +48,7 @@ The following parameters can modify how the logging behaves:
 :errorname: the name for `error`. Default: `ERROR`.
 
 For example, AWS CloudWatch supports the `discovered fields <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_AnalyzeLogData-discoverable-fields.html>`_.
-Therefor, if `timestampname` and `messagename` are `@timestamp` and `@message`, CloudWatch can discovere those fields.
+Therefore, if timestamp name and messagename are @timestamp and @message, CloudWatch can discovere those fields.
 And more, `.info()`, `.warn()` and `.error()` methods can receives extra payload.
 
 
