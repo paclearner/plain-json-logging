@@ -27,9 +27,9 @@ The result is found in `stderr` like this:
 
 .. code-block:: python
 
-    { "timestamp": , "level": "INFO", "message": "this is info."}
-    { "timestamp": , "level": "WARNNING", "message": "this is warn."}
-    { "timestamp": , "level": "ERROR", "message": "this is error."}
+    { "timestamp": "2020-01-10T00:06:24.855159", "level": "INFO", "message": "this is info."}
+    { "timestamp": "2020-01-10T00:06:24.855159", "level": "WARNNING", "message": "this is warn."}
+    { "timestamp": "2020-01-10T00:06:24.855159", "level": "ERROR", "message": "this is error."}
 
 
 Options:
