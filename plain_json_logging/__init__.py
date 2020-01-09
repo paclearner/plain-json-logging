@@ -12,7 +12,7 @@ class PlainJsonLogging:
       levelname='level',
       messagename='message',
       inforname='INFO',
-      warnname='WARNNING',
+      warnname='WARNING',
       errorname='ERROR'):
         self.file = file
         self.strftime = strftime

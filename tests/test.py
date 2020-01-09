@@ -98,5 +98,5 @@ class Test(unittest.TestCase):
             content = f.read()
             self.assertTrue(content.find('this is a extra payload for info.') > -1)
             self.assertTrue(content.find('this is a extra payload for warning.') > -1)
-            self.assertTrue(content.find('this is a extra payload for warning.') > -1)
+            self.assertTrue(content.find('this is a extra payload for error.') > -1)
         os.remove(output)
