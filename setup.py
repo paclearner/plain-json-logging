@@ -6,7 +6,7 @@ except ImportError:
 
 setup(
     name='plain-json-logging',
-    version='0.0.3',
+    version='0.1.0',
     description='A simple logging in JSON',
     long_description=codecs.open('README.rst', 'r', 'utf-8').read(),
     author='Junnosuke Moriya',

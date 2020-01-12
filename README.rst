@@ -19,60 +19,115 @@ Usage:
     from plain_json_logging import PlainJsonLogging
 
     logging = new PlainJsonLogging()
-    logging.info('this is info.')
-    logging.warn('this is warn.')
     logging.error('this is error.)
+    logging.warn('this is warn.')
+    logging.info(
+      'foo'
+    ).info(
+      'bar'
+    ).info(
+      'baz'
+    )
+
 
 The result is found in `stderr` like this:
 
-.. code-block:: python
+.. code-block:: json
 
-    { "timestamp": "2020-01-10T00:06:24.855159", "level": "INFO", "message": "this is info."}
-    { "timestamp": "2020-01-10T00:06:24.855159", "level": "WARNING", "message": "this is warn."}
     { "timestamp": "2020-01-10T00:06:24.855159", "level": "ERROR", "message": "this is error."}
+    { "timestamp": "2020-01-10T00:06:24.855159", "level": "WARN", "message": "this is warn."}
+    { "timestamp": "2020-01-10T00:06:24.855159", "level": "INFO", "message": "foo"}
+    { "timestamp": "2020-01-10T00:06:24.855159", "level": "INFO", "message": "bar"}
+    { "timestamp": "2020-01-10T00:06:24.855159", "level": "INFO", "message": "baz"}
 
 
 Options:
---------------
-
-The following parameters can modify how the logging behaves:
-
-:file: the `f` for `print('output to file', file=f)`. Default: `stderr`.
-:strftime: the `format <https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior>`_. Defalut: `datetime.datetime <https://docs.python.org/3/library/datetime.html>`_ default.
-:timedelta: the `timedelta <https://docs.python.org/3/library/datetime.html#datetime.timedelta>`_. The minute is a unit.
-:timestampname: the name for `timestamp`. Default: `timestamp`.
-:levelname: the name for `level`. Default: `level`.
-:messagename: the name for `message`. Default: `message`.
-:infoname: the name for `info`. Default: `INFO`.
-:warnname: the name for `warn`. Default: `WARNING`.
-:errorname: the name for `error`. Default: `ERROR`.
-
-For example, AWS CloudWatch supports the `discovered fields <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_AnalyzeLogData-discoverable-fields.html>`_.
-Therefore, if timestamp name and messagename are @timestamp and @message, CloudWatch can discovere those fields.
-And more, `.info()`, `.warn()` and `.error()` methods can receives extra payload.
-
+--------
 
 .. code-block:: python
 
     from plain_json_logging import PlainJsonLogging
 
     logging = new PlainJsonLogging(
-        file=sys.stdout,
-        strftime='%Y-%m-%d %H:%M:%S.%f%z',
-        timedelta=+540, # 9 hours
-        timestampname='@timestamp',
-        levelname='level',
-        messagename='@message',
+      file=sys.stdout,
+      strftime='%Y-%m-%d %H:%M:%S.%f%z',
+      timedelta=+540, # 9 hours
+      timestampname='@timestamp',
+      messagename='@message',
+      levelname='lev',
+      levelinfo=0,
+      levelwarn=1,
+      levelerror=2,
+    )
+
+The following parameters can modify how the logging behaves:
+
+:file: the writable `file object <https://docs.python.org/3/glossary.html#term-file-object>`_. Default: `sys.stderr`.
+:strftime: the `format <https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior>`_. Defalut: `datetime.datetime <https://docs.python.org/3/library/datetime.html>`_ default.
+:timedelta: the `timedelta <https://docs.python.org/3/library/datetime.html#datetime.timedelta>`_. The `minute` is a unit. Default: `0`.
+:timestampname: the name for `timestamp`. Default: `timestamp`.
+:messagename: the name for `message`. Default: `message`.
+:levelname: the name for `level`. Default: `level`.
+:levelinfo: the value for the level `info`. Default: `INFO`.
+:levelwarn: the value for the level `warn`. Default: `WARN`.
+:levelerror: the value for the level `error`. Default: `ERROR`.
+
+
+API:
+----
+
+`PlainJsonLogging` has the following three methods:
+
+* info
+* warn
+* error
+
+All the methods returns the `PlainJsonLogging` instance itself.
+Therefore, `method chaining` can be used for logging:
+
+.. code-block:: python
+
+    from plain_json_logging import PlainJsonLogging
+
+    logging = new PlainJsonLogging()
+    logging.info(
+      'foo'
+    ).info(
+      'bar'
+    ).info(
+      'baz'
+    )
+
+
+Extra Payload:
+--------------
+
+All the methods can receives extra payload.
+
+.. code-block:: python
+
+    from plain_json_logging import PlainJsonLogging
+
+    logging = new PlainJsonLogging(
+      file=sys.stdout,
+      strftime='%Y-%m-%d %H:%M:%S.%f%z',
+      timedelta=+540, # 9 hours
+      timestampname='@timestamp',
+      messagename='@message',
+      levelname='lev',
+      levelinfo=0,
+      levelwarn=1,
+      levelerror=2,
     )
 
     logging.info('this is info.', { 'infoData': 'this is a extra payload for info.'})
-    logging.warn('this is warn.', { 'warnData': 'this is a extra payload for warning.'})
+    logging.warn('this is warn.', { 'warnData': 'this is a extra payload for warn.'})
     logging.error('this is error.', { 'errData': 'this is a extra payload for error.'})
 
 The result is found in `stdout` like this:
 
-.. code-block:: python
+.. code-block:: json
 
-    {"infoData": "this is a extra payload for info.", "@timestamp": "2020-01-10 05:31:20.151462", "level": "INFO", "@message": "this is info"}
-    {"warnData": "this is a extra payload for warning.", "@timestamp": "2020-01-10 05:31:20.151462", "level": "WARNING", "@message": "this is warn"}
-    {"errData": "this is a extra payload for error.", "@timestamp": "2020-01-10 05:31:20.151462", "level": "ERROR", "@message": "this is error"}
+    {"@timestamp": "2020-01-13 07:17:06.370000", "lev": 0, "@message": "this is info.", "infoData": "this is a extra payload for info."}
+    {"@timestamp": "2020-01-13 07:17:06.370000", "lev": 1, "@message": "this is warn.", "warnData": "this is a extra payload for warn."}
+    {"@timestamp": "2020-01-13 07:17:06.370000", "lev": 2, "@message": "this is error.", "errData": "this is a extra payload for error."}

@@ -1,3 +1,4 @@
+import collections
 import datetime
 import json
 import sys
@@ -9,42 +10,52 @@ class PlainJsonLogging:
       strftime='%Y-%m-%dT%H:%M:%S.%f',
       timedelta=0,
       timestampname='timestamp',
-      levelname='level',
       messagename='message',
-      inforname='INFO',
-      warnname='WARNING',
-      errorname='ERROR'):
+      levelname='level',
+      levelinfo='INFO',
+      levelwarn='WARN',
+      levelerror='ERROR'):
         self.file = file
-        self.strftime = strftime
-        self.timedelta = datetime.timedelta(minutes=timedelta)
-        self.timestampname = timestampname
-        self.levelname = levelname
-        self.messagename = messagename
-        self.inforname = inforname
-        self.warnname = warnname
-        self.errorname = errorname
+        self.time = {
+            'strftime': strftime,
+            'timedelta': datetime.timedelta(minutes=timedelta),
+        }
+        self.name = {
+            'timestamp': timestampname,
+            'message': messagename,
+            'level': levelname,
+        }
+        self.level = {
+            'info': levelinfo,
+            'warn': levelwarn,
+            'error': levelerror,
+        }
+
+    def __timestamp(self):
+        now = datetime.datetime.now() + self.time['timedelta']
+        return now.strftime(self.time['strftime'])
 
     def __dump(self, log):
         self.file.write(json.dumps(log, ensure_ascii=False) + u'\n')
 
-    def __timestamp(self):
-        now = datetime.datetime.now() + self.timedelta
-        return now.strftime(self.strftime)
-
-    def __log(self, level, message, extend=None):
-        log = {}
-        if extend is not None:
-            log.update(extend)
-        log[self.timestampname] = self.__timestamp()
-        log[self.levelname] = level
-        log[self.messagename] = message
+    def __log(self, level, message, extra=None):
+        log = collections.OrderedDict()
+        log[self.name['timestamp']] = self.__timestamp()
+        log[self.name['level']] = level
+        log[self.name['message']] = message
+        if extra is not None:
+            for key in sorted(extra.keys()):
+                log[key] = extra[key]
         self.__dump(log)
 
-    def error(self, message, extend=None):
-        self.__log(self.errorname, message, extend)
+    def info(self, message, extra=None):
+        self.__log(self.level['info'], message, extra)
+        return self
 
-    def warn(self, message, extend=None):
-        self.__log(self.warnname, message, extend)
+    def warn(self, message, extra=None):
+        self.__log(self.level['warn'], message, extra)
+        return self
 
-    def info(self, message, extend=None):
-        self.__log(self.inforname, message, extend)
+    def error(self, message, extra=None):
+        self.__log(self.level['error'], message, extra)
+        return self
