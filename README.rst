@@ -58,19 +58,22 @@ Options:
       levelinfo=0,
       levelwarn=1,
       levelerror=2,
+      constextra={ name: 'Example' }
     )
 
 The following parameters can modify how the logging behaves:
 
-:file: the writable `file object <https://docs.python.org/3/glossary.html#term-file-object>`_. Default: `sys.stderr`.
-:strftime: the `format <https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior>`_. Defalut: `datetime.datetime <https://docs.python.org/3/library/datetime.html>`_ default.
-:timedelta: the `timedelta <https://docs.python.org/3/library/datetime.html#datetime.timedelta>`_. The `minute` is a unit. Default: `0`.
+:file:          the writable `file object <https://docs.python.org/3/glossary.html#term-file-object>`_. Default: `sys.stderr`.
+:strftime:      the `format <https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior>`_. Defalut: `datetime.datetime <https://docs.python.org/3/library/datetime.html>`_ default.
+:timedelta:     the `timedelta <https://docs.python.org/3/library/datetime.html#datetime.timedelta>`_. The `minute` is a unit. Default: `0`.
 :timestampname: the name for `timestamp`. Default: `timestamp`.
-:messagename: the name for `message`. Default: `message`.
-:levelname: the name for `level`. Default: `level`.
-:levelinfo: the value for the level `info`. Default: `INFO`.
-:levelwarn: the value for the level `warn`. Default: `WARN`.
-:levelerror: the value for the level `error`. Default: `ERROR`.
+:messagename:   the name for `message`. Default: `message`.
+:levelname:     the name for `level`. Default: `level`.
+:levelinfo:     the value for the level `info`. Default: `INFO`.
+:levelwarn:     the value for the level `warn`. Default: `WARN`.
+:levelerror:    the value for the level `error`. Default: `ERROR`.
+:constextra:    the default additional items for each log
+                (the value must be a dictionary object): Default: `None`.
 
 
 API:
@@ -118,6 +121,7 @@ All the methods can receives extra payload.
       levelinfo=0,
       levelwarn=1,
       levelerror=2,
+      constextra={ name: 'Example' },
     )
 
     logging.info('this is info.', { 'infoData': 'this is a extra payload for info.'})
@@ -128,6 +132,6 @@ The result is found in `stdout` like this:
 
 .. code-block:: json
 
-    {"@timestamp": "2020-01-13 07:17:06.370000", "lev": 0, "@message": "this is info.", "infoData": "this is a extra payload for info."}
-    {"@timestamp": "2020-01-13 07:17:06.370000", "lev": 1, "@message": "this is warn.", "warnData": "this is a extra payload for warn."}
-    {"@timestamp": "2020-01-13 07:17:06.370000", "lev": 2, "@message": "this is error.", "errData": "this is a extra payload for error."}
+    {"@timestamp": "2020-01-13 07:17:06.370000", "lev": 0, "@message": "this is info.", "name": "Example", "infoData": "this is a extra payload for info."}
+    {"@timestamp": "2020-01-13 07:17:06.370000", "lev": 1, "@message": "this is warn.", "name": "Example", "warnData": "this is a extra payload for warn."}
+    {"@timestamp": "2020-01-13 07:17:06.370000", "lev": 2, "@message": "this is error.", "name": "Example", "errData": "this is a extra payload for error."}

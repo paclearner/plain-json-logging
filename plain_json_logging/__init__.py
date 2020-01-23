@@ -14,7 +14,8 @@ class PlainJsonLogging:
       levelname='level',
       levelinfo='INFO',
       levelwarn='WARN',
-      levelerror='ERROR'):
+      levelerror='ERROR',
+      constextra=None):
         self.file = file
         self.time = {
             'strftime': strftime,
@@ -30,6 +31,7 @@ class PlainJsonLogging:
             'warn': levelwarn,
             'error': levelerror,
         }
+        self.constextra = constextra
 
     def __timestamp(self):
         now = datetime.datetime.now() + self.time['timedelta']
@@ -43,6 +45,9 @@ class PlainJsonLogging:
         log[self.name['timestamp']] = self.__timestamp()
         log[self.name['level']] = level
         log[self.name['message']] = message
+        if self.constextra is not None:
+            for key in self.constextra.keys():
+                log[key] = self.constextra[key]
         if extra is not None:
             for key in sorted(extra.keys()):
                 log[key] = extra[key]

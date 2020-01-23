@@ -146,6 +146,7 @@ class Test(unittest.TestCase):
               levelinfo=0,
               levelwarn=1,
               levelerror=2,
+              constextra={ 'name': 'Example' },
             )
             logger.info(case['info']['msg'], case['info']['ext'])
             logger.warn(case['warn']['msg'], case['warn']['ext'])
@@ -159,7 +160,9 @@ class Test(unittest.TestCase):
             self.assertTrue(content.find('infoData') > -1)
             self.assertTrue(content.find('warnData') > -1)
             self.assertTrue(content.find('errorData') > -1)
+            self.assertTrue(content.find('"name": "Example"') > -1)
             self.assertTrue(content.find(case['info']['ext']['infoData']) > -1)
             self.assertTrue(content.find(case['warn']['ext']['warnData']) > -1)
             self.assertTrue(content.find(case['error']['ext']['errorData']) > -1)
+
         os.remove(output)
