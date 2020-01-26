@@ -1,6 +1,7 @@
 import collections
 import datetime
 import json
+import pytz
 import sys
 
 class PlainJsonLogging:
@@ -8,6 +9,7 @@ class PlainJsonLogging:
     def __init__(self,
       file=sys.stderr,
       strftime='%Y-%m-%dT%H:%M:%S.%f',
+      timezone=None,
       timedelta=0,
       timestampname='timestamp',
       messagename='message',
@@ -19,6 +21,7 @@ class PlainJsonLogging:
         self.file = file
         self.time = {
             'strftime': strftime,
+            'tz': pytz.utc if timezone is None else pytz.timezone(timezone),
             'timedelta': datetime.timedelta(minutes=timedelta),
         }
         self.name = {
@@ -34,7 +37,7 @@ class PlainJsonLogging:
         self.constextra = constextra
 
     def __timestamp(self):
-        now = datetime.datetime.now() + self.time['timedelta']
+        now = datetime.datetime.now(tz=self.time['tz']) + self.time['timedelta']
         return now.strftime(self.time['strftime'])
 
     def __dump(self, log):

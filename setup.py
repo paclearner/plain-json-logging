@@ -6,7 +6,7 @@ except ImportError:
 
 setup(
     name='plain-json-logging',
-    version='0.3.1',
+    version='0.4.0',
     description='A simple logging in JSON',
     long_description=codecs.open('README.rst', 'r', 'utf-8').read(),
     author='Junnosuke Moriya',
@@ -15,6 +15,9 @@ setup(
     license='Apache License 2.0',
     packages=['plain_json_logging'],
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
+    install_requires=[
+        "pytz",
+    ],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',

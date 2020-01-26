@@ -57,8 +57,9 @@ class Test(unittest.TestCase):
 
         logger = PlainJsonLogging(
           file=sys.stderr,
+          timezone='America/Chicago',
           timedelta=+60,
-          levelinfo='INFORMATION'
+          levelinfo='INFORMATION',
         )
         logger.info('::{0}::i::'.format(name))
 
@@ -139,6 +140,7 @@ class Test(unittest.TestCase):
             logger = PlainJsonLogging(
               file=f,
               strftime='%Y-%m-%d %H:%M:%S.%f%z',
+              timezone='Asia/Tokyo',
               timedelta=+540, # 9 hours
               timestampname='@timestamp',
               messagename='@message',
